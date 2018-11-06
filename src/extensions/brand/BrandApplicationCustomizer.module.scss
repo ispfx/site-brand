@@ -1,0 +1,19 @@
+.header {
+  background: '[theme:themePrimary, default:#0078d4]';
+  text-align: center;
+  padding: 20px 0;
+}
+
+.siteTitle {
+  font-weight: 200;
+  font-size: 2.5em;
+  color: '[theme:white, default:#ffffff]';
+  margin: 0;
+}
+
+.footer {
+  background: '[theme:neutralLighter, default:#f4f4f4]';
+  color: '[theme:neutralTertiary, default:#a6a6a6]';
+  text-align: center;
+  padding: 20px 0;
+}

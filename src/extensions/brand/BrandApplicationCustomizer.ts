@@ -1,13 +1,9 @@
 import { override } from '@microsoft/decorators';
-import { Log } from '@microsoft/sp-core-library';
 import {
-  BaseApplicationCustomizer
+  BaseApplicationCustomizer, PlaceholderName
 } from '@microsoft/sp-application-base';
-import { Dialog } from '@microsoft/sp-dialog';
-
+import styles from './BrandApplicationCustomizer.module.scss';
 import * as strings from 'BrandApplicationCustomizerStrings';
-
-const LOG_SOURCE: string = 'BrandApplicationCustomizer';
 
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
@@ -25,15 +21,27 @@ export default class BrandApplicationCustomizer
 
   @override
   public onInit(): Promise<void> {
-    Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
-
-    let message: string = this.properties.testMessage;
-    if (!message) {
-      message = '(No properties were provided.)';
-    }
-
-    Dialog.alert(`Hello from ${strings.Title}:\n\n${message}`);
+    this.context.placeholderProvider.changedEvent.add(this, this.top);
+    this.context.placeholderProvider.changedEvent.add(this, this.bottom);
 
     return Promise.resolve();
+  }
+
+  private top(): void {
+    const placeholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top);
+    placeholder.domElement.innerHTML = `
+      <header class="${styles.header}">
+        <h1 class="${styles.siteTitle}">${this.context.pageContext.web.title}</h1>
+      </header>
+    `;
+  }
+
+  private bottom(): void {
+    const placeholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Bottom);
+    placeholder.domElement.innerHTML = `
+      <footer class="${styles.footer}">
+        &copy; 2018 Spiritous
+      </footer>
+    `;
   }
 }
